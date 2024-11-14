@@ -1,0 +1,21 @@
+Os scripts: 
+
+01_tuteladoDB_Database: Crea unha nova base de datos, "tuteladoDB", con propietario Postgres (se a BD xa existía previamente, primeiro a elimina).
+
+Opcional: Se queremos que a base de datos sexan propiedade dun usuario hib/hib123:
+
+02_tuteladoDB_Roles:        Crea o novo rol "hib", con contrasinal "hib123" (se o usario xa existia, non fai nada)
+03_tuteladoDB_ChangeOwner:  Establece a "hib" como propietario da BD.
+
+----------------------------------------------------------------------------
+
+Execución:
+
+psql -d postgres -U postgres -f 01_tuteladoDB_Database.sql
+
+Opcional:
+
+psql -d postgres -U postgres -f 02_tuteladoDB_Roles.sql 
+psql -d postgres    -U postgres -f 03_tuteladoDB_ChangeOwner.sql 
+
+
