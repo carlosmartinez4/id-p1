@@ -4,10 +4,6 @@ import javax.persistence.*;
 import java.util.Objects;
 import java.util.Set;
 
-@TableGenerator(name="generadorIdsIncendio", table="tabla_ids",
-        pkColumnName="nombre_id", pkColumnValue="idIncendio",
-        valueColumnName="ultimo_valor_id",
-        initialValue=0, allocationSize=1)
 @Entity
 @Table(name = "Incendio")
 public class Incendio extends Intervencion{
@@ -16,7 +12,7 @@ public class Incendio extends Intervencion{
     double supQuemada;
 
     @ElementCollection
-    @CollectionTable(name = "localidadesAfectadas", joinColumns = @JoinColumn(name = "localidades_id"))
+    @CollectionTable(name = "localidadesAfectadas", joinColumns = @JoinColumn(name = "id"))
     @Column(name = "localidad", nullable = false)
     Set<String> localidadesAfectadas;
 

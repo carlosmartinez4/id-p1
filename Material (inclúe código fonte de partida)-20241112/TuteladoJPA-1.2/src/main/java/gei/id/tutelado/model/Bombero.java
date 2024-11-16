@@ -4,8 +4,8 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@TableGenerator(name="generadorIdsBombero", table="tabla_ids",
-        pkColumnName="nombre_id", pkColumnValue="idBombero",
+@TableGenerator(name="xeradorIdsBomberos", table="taboa_ids",
+        pkColumnName="nome_id", pkColumnValue="idBombero",
         valueColumnName="ultimo_valor_id",
         initialValue=0, allocationSize=1)
 

@@ -6,8 +6,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.SortedSet;
 
-@TableGenerator(name="generadorIdsBrigada", table="tabla_ids",
-        pkColumnName="nombre_id", pkColumnValue="idBrigada",
+@TableGenerator(name="xeradorIdsBrigadas", table="taboa_ids",
+        pkColumnName="nome_id", pkColumnValue="idBrigada",
         valueColumnName="ultimo_valor_id",
         initialValue=0, allocationSize=1)
 
