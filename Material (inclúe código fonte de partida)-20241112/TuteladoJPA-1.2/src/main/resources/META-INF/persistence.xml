@@ -15,9 +15,12 @@
 
 	 		<!-- Entity classes --> 
 	        <class>gei.id.tutelado.model.Usuario</class>
+			<class>gei.id.tutelado.model.EntradaLog</class>
 			<class>gei.id.tutelado.model.Brigada</class>
 			<class>gei.id.tutelado.model.Bombero</class>
-	        <class>gei.id.tutelado.model.EntradaLog</class>
+			<class>gei.id.tutelado.model.Intervencion</class>
+			<class>gei.id.tutelado.model.Rescate</class>
+			<class>gei.id.tutelado.model.Incendio</class>
 	        <exclude-unlisted-classes>true</exclude-unlisted-classes>
 
 	        <properties>

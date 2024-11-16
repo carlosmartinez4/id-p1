@@ -23,17 +23,17 @@ public class Bombero {
     @Column(unique = true, nullable = false)
     private String nss;
 
-    @Column(unique = false, nullable = false)
+    @Column(nullable = false)
     private String nombre;
 
-    @Column(unique = false, nullable = false)
+    @Column(nullable = false)
     private LocalDateTime fechaHoraAlta;
 
-    @Column(unique = false, nullable = false)
+    @Column(nullable = false)
     private LocalDate fechaNacimiento;
 
     @ManyToOne(cascade = {}, fetch = FetchType.EAGER)
-    @JoinColumn(nullable = false, unique = false)
+    @JoinColumn(nullable = false)
     private Brigada brigada;
 
     public Long getId() {

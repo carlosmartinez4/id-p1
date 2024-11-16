@@ -2,8 +2,9 @@ package gei.id.tutelado.model;
 
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.SortedSet;
-import java.util.TreeSet;
 
 @TableGenerator(name="generadorIdsBrigada", table="tabla_ids",
         pkColumnName="nombre_id", pkColumnValue="idBrigada",
@@ -24,16 +25,19 @@ public class Brigada {
     @Column(nullable = false, unique = true)
     private String nombre;
 
-    @Column(nullable = false, unique=false)
+    @Column(nullable = false)
     private String localidad;
 
     @OneToMany (mappedBy="brigada", fetch=FetchType.LAZY, cascade={CascadeType.PERSIST, CascadeType.REMOVE} )
-    @OrderBy("nombre ASC")
-    private SortedSet<Bombero> bomberos = new TreeSet<>();
+    private Set<Bombero> bomberos = new HashSet<>();
     // NOTA: necesitamos @OrderBy, ainda que a colección estea definida como LAZY, por se nalgun momento accedemos á propiedade DENTRO de sesión.
     // Garantimos así que cando Hibernate cargue a colección, o faga na orde axeitada na consulta que lanza contra a BD
 
-    int numBomberos;
+    @ManyToMany
+    @JoinTable(name="Brigada_Intervencion",
+        joinColumns = @JoinColumn(name="id_brigada"),
+        inverseJoinColumns = @JoinColumn(name="id_intervencion"))
+    private Set<Intervencion> intervenciones = new HashSet<>();
 
     // Metodo de conveniencia para asegurarno3s de que actualizamos os dous extremos da asociación ao mesmo tempo
     public void addBombero(Bombero bombero) {
@@ -77,17 +81,20 @@ public class Brigada {
         this.localidad = localidad;
     }
 
-    public SortedSet<Bombero> getBomberos() {
+    public Set<Bombero> getBomberos() {
         return bomberos;
     }
 
-    public void setBomberos(SortedSet<Bombero> bomberos) {
+    public void setBomberos(Set<Bombero> bomberos) {
         this.bomberos = bomberos;
-        this.numBomberos = bomberos.size();
     }
 
-    public int getNumBomberos() {
-        return numBomberos;
+    public Set<Intervencion> getIntervenciones() {
+        return intervenciones;
+    }
+
+    public void setIntervenciones(Set<Intervencion> intervenciones) {
+        this.intervenciones = intervenciones;
     }
 
     @Override
@@ -117,7 +124,7 @@ public class Brigada {
                 ", nombre='" + nombre + '\'' +
                 ", localidad='" + localidad + '\'' +
                 ", bomberos=" + bomberos +
-                ", numBomberos=" + numBomberos +
+                ", intervenciones=" + intervenciones +
                 '}';
     }
 }
