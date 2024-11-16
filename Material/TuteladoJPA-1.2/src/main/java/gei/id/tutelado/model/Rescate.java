@@ -4,6 +4,12 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "Rescate")
+
+@NamedQueries({
+        @NamedQuery(name="Rescate.recuperaPorCodigo",
+                query="SELECT i FROM Intervencion i JOIN Rescate r ON i.id = r.id WHERE i.codigo=:codigo")
+})
+
 public class Rescate extends Intervencion{
 
     @Column(nullable = false)

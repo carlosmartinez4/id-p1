@@ -1,34 +1,32 @@
 package gei.id.tutelado.dao;
 
 import gei.id.tutelado.configuracion.Configuracion;
-import gei.id.tutelado.model.Brigada;
-import org.hibernate.LazyInitializationException;
+import gei.id.tutelado.model.Incendio;
+
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BrigadaDaoJPA implements BrigadaDao {
-
+public class IncendioDaoJPA implements IncendioDao{
     private EntityManagerFactory emf;
     private EntityManager em;
 
     @Override
-    public void setup (Configuracion config) {
+    public void setup(Configuracion config) {
         this.emf = (EntityManagerFactory) config.get("EMF");
     }
 
-    /* MO4.1 */
     @Override
-    public Brigada recuperaPorNombre(String nombre) {
-        List<Brigada> brigadas = new ArrayList<>();
+    public Incendio recuperaPorCodigo(String codigo) {
+        List<Incendio> incendios = new ArrayList<>();
 
         try{
             em = emf.createEntityManager();
             em.getTransaction().begin();
 
-            brigadas = em.createNamedQuery("Brigada.recuperaPorNombre", Brigada.class).setParameter("nombre", nombre).getResultList();
+            incendios = em.createNamedQuery("Incendio.recuperaPorCodigo", Incendio.class).setParameter("codigo", codigo).getResultList();
 
             em.getTransaction().commit();
             em.close();
@@ -39,17 +37,16 @@ public class BrigadaDaoJPA implements BrigadaDao {
                 throw(ex);
             }
         }
-        return (brigadas.isEmpty()?null:brigadas.get(0));
+        return (incendios.isEmpty()?null:incendios.get(0));
     }
 
-    /* MO4.2 */
     @Override
-    public Brigada almacena(Brigada brigada) {
+    public Incendio almacena(Incendio incendio) {
         try {
             em = emf.createEntityManager();
             em.getTransaction().begin();
 
-            em.persist(brigada);
+            em.persist(incendio);
 
             em.getTransaction().commit();
             em.close();
@@ -60,40 +57,36 @@ public class BrigadaDaoJPA implements BrigadaDao {
                 throw(ex);
             }
         }
-        return brigada;
+        return incendio;
     }
 
-    /* MO4.3 */
     @Override
-    public void elimina(Brigada brigada) {
+    public void elimina(Incendio incendio) {
         try {
-
             em = emf.createEntityManager();
             em.getTransaction().begin();
 
-            Brigada brigadaTmp = em.find (Brigada.class, brigada.getId());
-            em.remove (brigadaTmp);
+            Incendio incendioTmp = em.find(Incendio.class, incendio.getCodigo());
+            em.remove(incendio);
 
             em.getTransaction().commit();
             em.close();
-
-        } catch (Exception ex ) {
-            if (em!=null && em.isOpen()) {
+        } catch (Exception ex) {
+            if (em != null && em.isOpen()) {
                 if (em.getTransaction().isActive()) em.getTransaction().rollback();
                 em.close();
-                throw(ex);
+                throw (ex);
             }
         }
     }
 
-    /* MO4.4 */
     @Override
-    public Brigada modifica(Brigada brigada) {
-        try {
+    public Incendio modifica(Incendio incendio) {
+        try{
             em = emf.createEntityManager();
             em.getTransaction().begin();
 
-            brigada = em.merge(brigada);
+            incendio = em.merge(incendio);
 
             em.getTransaction().commit();
             em.close();
@@ -104,35 +97,6 @@ public class BrigadaDaoJPA implements BrigadaDao {
                 throw(ex);
             }
         }
-        return brigada;
-    }
-
-    /* MO4.5 */
-    @Override
-    public Brigada restauraBomberos(Brigada brigada) {
-        try {
-            em = emf.createEntityManager();
-            em.getTransaction().begin();
-
-            try{
-                brigada.getBomberos().size();
-            } catch (Exception ex2 ){
-                if (ex2 instanceof LazyInitializationException){
-                    brigada = em.merge(brigada);
-                    brigada.getBomberos().size();
-                } else{
-                    throw(ex2);
-                }
-            }
-            em.getTransaction().commit();
-            em.close();
-        } catch (Exception ex){
-            if (em!=null && em.isOpen()){
-                if (em.getTransaction().isActive()) em.getTransaction().rollback();
-                em.close();
-                throw(ex);
-            }
-        }
-        return brigada;
+        return incendio;
     }
 }

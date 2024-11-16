@@ -1,34 +1,32 @@
 package gei.id.tutelado.dao;
 
 import gei.id.tutelado.configuracion.Configuracion;
-import gei.id.tutelado.model.Brigada;
-import org.hibernate.LazyInitializationException;
+import gei.id.tutelado.model.Rescate;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BrigadaDaoJPA implements BrigadaDao {
+public class RescateDaoJPA implements RescateDao {
 
     private EntityManagerFactory emf;
     private EntityManager em;
 
     @Override
-    public void setup (Configuracion config) {
+    public void setup(Configuracion config) {
         this.emf = (EntityManagerFactory) config.get("EMF");
     }
 
-    /* MO4.1 */
     @Override
-    public Brigada recuperaPorNombre(String nombre) {
-        List<Brigada> brigadas = new ArrayList<>();
+    public Rescate recuperaPorCodigo(String codigo) {
+        List<Rescate> rescates = new ArrayList<>();
 
         try{
             em = emf.createEntityManager();
             em.getTransaction().begin();
 
-            brigadas = em.createNamedQuery("Brigada.recuperaPorNombre", Brigada.class).setParameter("nombre", nombre).getResultList();
+            rescates = em.createNamedQuery("Rescate.recuperaPorCodigo", Rescate.class).setParameter("codigo", codigo).getResultList();
 
             em.getTransaction().commit();
             em.close();
@@ -39,17 +37,16 @@ public class BrigadaDaoJPA implements BrigadaDao {
                 throw(ex);
             }
         }
-        return (brigadas.isEmpty()?null:brigadas.get(0));
+        return (rescates.isEmpty()?null:rescates.get(0));
     }
 
-    /* MO4.2 */
     @Override
-    public Brigada almacena(Brigada brigada) {
+    public Rescate almacena(Rescate rescate) {
         try {
             em = emf.createEntityManager();
             em.getTransaction().begin();
 
-            em.persist(brigada);
+            em.persist(rescate);
 
             em.getTransaction().commit();
             em.close();
@@ -60,40 +57,17 @@ public class BrigadaDaoJPA implements BrigadaDao {
                 throw(ex);
             }
         }
-        return brigada;
+        return rescate;
     }
 
-    /* MO4.3 */
     @Override
-    public void elimina(Brigada brigada) {
-        try {
-
-            em = emf.createEntityManager();
-            em.getTransaction().begin();
-
-            Brigada brigadaTmp = em.find (Brigada.class, brigada.getId());
-            em.remove (brigadaTmp);
-
-            em.getTransaction().commit();
-            em.close();
-
-        } catch (Exception ex ) {
-            if (em!=null && em.isOpen()) {
-                if (em.getTransaction().isActive()) em.getTransaction().rollback();
-                em.close();
-                throw(ex);
-            }
-        }
-    }
-
-    /* MO4.4 */
-    @Override
-    public Brigada modifica(Brigada brigada) {
+    public void elimina(Rescate rescate) {
         try {
             em = emf.createEntityManager();
             em.getTransaction().begin();
 
-            brigada = em.merge(brigada);
+            Rescate rescateTmp = em.find(Rescate.class, rescate.getCodigo());
+            em.remove(rescateTmp);
 
             em.getTransaction().commit();
             em.close();
@@ -104,26 +78,16 @@ public class BrigadaDaoJPA implements BrigadaDao {
                 throw(ex);
             }
         }
-        return brigada;
     }
 
-    /* MO4.5 */
     @Override
-    public Brigada restauraBomberos(Brigada brigada) {
+    public Rescate modifica(Rescate rescate) {
         try {
             em = emf.createEntityManager();
             em.getTransaction().begin();
 
-            try{
-                brigada.getBomberos().size();
-            } catch (Exception ex2 ){
-                if (ex2 instanceof LazyInitializationException){
-                    brigada = em.merge(brigada);
-                    brigada.getBomberos().size();
-                } else{
-                    throw(ex2);
-                }
-            }
+            em.merge(rescate);
+
             em.getTransaction().commit();
             em.close();
         } catch (Exception ex){
@@ -133,6 +97,6 @@ public class BrigadaDaoJPA implements BrigadaDao {
                 throw(ex);
             }
         }
-        return brigada;
+        return rescate;
     }
 }
