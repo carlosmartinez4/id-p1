@@ -2,6 +2,7 @@ package gei.id.tutelado.dao;
 
 import gei.id.tutelado.configuracion.Configuracion;
 import gei.id.tutelado.model.Brigada;
+import gei.id.tutelado.model.Usuario;
 import org.hibernate.LazyInitializationException;
 
 import javax.persistence.EntityManager;
@@ -67,15 +68,18 @@ public class BrigadaDaoJPA implements BrigadaDao {
     @Override
     public void elimina(Brigada brigada) {
         try {
+
             em = emf.createEntityManager();
             em.getTransaction().begin();
 
-            em.remove(brigada);
+            Brigada brigadaTmp = em.find (Brigada.class, brigada.getId());
+            em.remove (brigadaTmp);
 
             em.getTransaction().commit();
             em.close();
-        } catch (Exception ex){
-            if (em!=null && em.isOpen()){
+
+        } catch (Exception ex ) {
+            if (em!=null && em.isOpen()) {
                 if (em.getTransaction().isActive()) em.getTransaction().rollback();
                 em.close();
                 throw(ex);
