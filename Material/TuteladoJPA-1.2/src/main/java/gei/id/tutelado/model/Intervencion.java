@@ -14,7 +14,7 @@ import java.util.Set;
 @Inheritance(strategy= InheritanceType.TABLE_PER_CLASS)
 public abstract class Intervencion {
     @Id
-    @GeneratedValue(generator="generadorIdsIntervencion")
+    @GeneratedValue(generator="xeradorIdsIntervencions")
     private Long id;
 
     @Column(nullable = false, unique = true)

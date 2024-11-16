@@ -69,15 +69,16 @@ public class ProductorDatosTest {
         this.brigada2.addBombero(this.bombero2);
     }
 
-    public void guardaBrigadas(){
-        EntityManager em = null;
+    public void guardaBrigadas() {
+        EntityManager em=null;
         try {
             em = emf.createEntityManager();
             em.getTransaction().begin();
 
-            Iterator<Brigada> it = listaBrigadas.iterator();
-            while (it.hasNext()) {
-                em.persist(it.next());
+            Iterator<Brigada> itB = this.listaBrigadas.iterator();
+            while (itB.hasNext()) {
+                Brigada b = itB.next();
+                em.persist(b);
                 // DESCOMENTAR SE A PROPAGACION DO PERSIST NON ESTA ACTIVADA
 				/*
 				Iterator<EntradaLog> itEL = u.getEntradasLog().iterator();
@@ -88,15 +89,11 @@ public class ProductorDatosTest {
             }
             em.getTransaction().commit();
             em.close();
-        } catch(Exception e){
-            if (em != null && em.isOpen()) {
+        } catch (Exception e) {
+            if (em!=null && em.isOpen()) {
                 if (em.getTransaction().isActive()) em.getTransaction().rollback();
                 em.close();
                 throw (e);
-            }
-        } finally {
-            if (em != null) {
-                em.close();
             }
         }
     }
@@ -107,8 +104,8 @@ public class ProductorDatosTest {
             em = emf.createEntityManager();
             em.getTransaction().begin();
 
-            Iterator <Usuario> itU = em.createQuery("SELECT u from Usuario u", Usuario.class).getResultList().iterator();
-            while (itU.hasNext()) em.remove(itU.next());
+            Iterator <Brigada> itB = em.createQuery("SELECT b from Brigada b", Brigada.class).getResultList().iterator();
+            while (itB.hasNext()) em.remove(itB.next());
 			/*
 			// Non é necesario porque establecemos  propagacion do remove
 			// Se desactivamos propagación, descomentar
@@ -116,14 +113,9 @@ public class ProductorDatosTest {
 			while (itL.hasNext()) em.remove(itL.next());
 			*/
 
-            em.createNativeQuery("UPDATE taboa_ids SET ultimo_valor_id=0 WHERE nome_id='idUsuario'" ).executeUpdate();
-            em.createNativeQuery("UPDATE taboa_ids SET ultimo_valor_id=0 WHERE nome_id='idEntradaLog'" ).executeUpdate();
             em.createNativeQuery("UPDATE taboa_ids SET ultimo_valor_id=0 WHERE nome_id='idBombero'" ).executeUpdate();
             em.createNativeQuery("UPDATE taboa_ids SET ultimo_valor_id=0 WHERE nome_id='idBrigada'" ).executeUpdate();
             em.createNativeQuery("UPDATE taboa_ids SET ultimo_valor_id=0 WHERE nome_id='idIntervencion'" ).executeUpdate();
-            em.createNativeQuery("UPDATE taboa_ids SET ultimo_valor_id=0 WHERE nome_id='idIncendio'" ).executeUpdate();
-            em.createNativeQuery("UPDATE taboa_ids SET ultimo_valor_id=0 WHERE nome_id='idRescate'" ).executeUpdate();
-
 
             em.getTransaction().commit();
             em.close();

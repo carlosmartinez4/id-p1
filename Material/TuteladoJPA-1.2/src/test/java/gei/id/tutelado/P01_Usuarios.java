@@ -187,7 +187,7 @@ public class P01_Usuarios {
 		Assert.assertEquals (novoNome, u2.getNome());
 
     } 	
-    /*
+/*
     @Test
     public void test09_Excepcions() {
     	
@@ -232,6 +232,7 @@ public class P01_Usuarios {
     		log.info(ex.getClass().getName());
     	}
     	Assert.assertTrue(excepcion);
-    } 	
+    }
+
  */
 }

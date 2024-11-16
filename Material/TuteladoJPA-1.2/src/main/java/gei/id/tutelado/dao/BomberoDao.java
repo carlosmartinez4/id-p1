@@ -17,6 +17,6 @@ public interface BomberoDao {
     /* MO4.4 */ Bombero modifica (Bombero bombero);
 
     // CONSULTAS JPQL
-    /* MO4.6.a */ List<Bombero> buscarBomberosPorBrigada(Brigada brigada);
+    /* MO4.6.a */ List<Bombero> buscarBomberosPorBrigada(Brigada b);
 
 }

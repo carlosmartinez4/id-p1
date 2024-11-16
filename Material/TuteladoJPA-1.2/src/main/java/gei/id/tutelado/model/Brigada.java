@@ -19,7 +19,7 @@ import java.util.SortedSet;
 @Entity
 public class Brigada {
     @Id
-    @GeneratedValue(generator="generadorIdsBrigada")
+    @GeneratedValue(generator="xeradorIdsBrigadas")
     private Long id;
 
     @Column(nullable = false, unique = true)

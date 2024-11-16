@@ -110,15 +110,14 @@ public class BomberoDaoJPA implements BomberoDao {
 
     /* MO4.6.a */
     @Override
-    public List<Bombero> buscarBomberosPorBrigada(Brigada brigada) {
-        List<Bombero> bomberos = null;
+    public List<Bombero> buscarBomberosPorBrigada(Brigada b) {
+        List <Bombero> bomberos=null;
 
         try {
             em = emf.createEntityManager();
             em.getTransaction().begin();
 
-            bomberos = em.createNamedQuery("SELECT b FROM Brigada e JOIN e.bomberos b WHERE e=:e ORDER BY b.nombre DESC",
-                    Bombero.class).setParameter("e", brigada).getResultList();
+            bomberos = em.createQuery("SELECT e FROM Brigada b JOIN b.bomberos e WHERE b=:b ORDER BY e.id ASC", Bombero.class).setParameter("b", b).getResultList();
 
             em.getTransaction().commit();
             em.close();

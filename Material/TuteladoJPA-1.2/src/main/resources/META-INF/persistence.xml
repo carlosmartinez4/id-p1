@@ -7,7 +7,7 @@
 
 		<persistence-unit name="TuteladoPU" transaction-type="RESOURCE_LOCAL">
 	        <description>
-			Unidade de persistencia (única) para traballo tutelado de ID		        
+				Unidade de persistencia (única) para traballo tutelado de ID
 	        </description>
 
 	        <!-- Persistence provider -->

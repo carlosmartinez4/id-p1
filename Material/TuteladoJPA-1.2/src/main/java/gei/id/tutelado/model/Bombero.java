@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @Entity
 public class Bombero {
     @Id
-    @GeneratedValue(generator = "generadorIdsBombero")
+    @GeneratedValue(generator = "xeradorIdsBomberos")
     private Long id;
 
     @Column(unique = true, nullable = false)
