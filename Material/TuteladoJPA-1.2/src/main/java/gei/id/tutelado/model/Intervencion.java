@@ -16,10 +16,12 @@ import java.util.Set;
 
 @Entity
 @Inheritance(strategy= InheritanceType.JOINED)
+@DiscriminatorColumn(name="clazz", discriminatorType=DiscriminatorType.STRING)
+@Table(name="Intervencion")
 public abstract class Intervencion {
     @Id
     @GeneratedValue(generator="xeradorIdsIntervencions")
-    private Long id;
+    private Long id_intervencion;
 
     @Column(nullable = false, unique = true)
     private String codigo;
@@ -41,11 +43,11 @@ public abstract class Intervencion {
 
 
     public Long getId() {
-        return id;
+        return id_intervencion;
     }
 
     public void setId(Long id) {
-        this.id = id;
+        this.id_intervencion = id;
     }
 
     public String getCodigo() {

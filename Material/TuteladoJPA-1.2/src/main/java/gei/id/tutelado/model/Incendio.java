@@ -10,6 +10,9 @@ import java.util.Set;
 })
 
 @Entity
+@DiscriminatorValue("INC")
+@Table(name="Incendio")
+@PrimaryKeyJoinColumn(name="id_intervencion")
 public class Incendio extends Intervencion{
 
     @Column(nullable = false)

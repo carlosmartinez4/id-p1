@@ -8,6 +8,9 @@ import javax.persistence.*;
 })
 
 @Entity
+@DiscriminatorValue("RES")
+@Table(name="Rescate")
+@PrimaryKeyJoinColumn(name="id_intervencion")
 public class Rescate extends Intervencion{
 
     @Column(nullable = false)
