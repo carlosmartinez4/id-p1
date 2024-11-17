@@ -2,14 +2,12 @@ package gei.id.tutelado.model;
 
 import javax.persistence.*;
 
-@Entity
-@Table(name = "Rescate")
-
 @NamedQueries({
         @NamedQuery(name="Rescate.recuperaPorCodigo",
-                query="SELECT i FROM Intervencion i JOIN Rescate r ON i.id = r.id WHERE i.codigo=:codigo")
+                query="SELECT i, r FROM Intervencion i JOIN Rescate r ON i.id = r.id WHERE i.codigo=:codigo")
 })
 
+@Entity
 public class Rescate extends Intervencion{
 
     @Column(nullable = false)

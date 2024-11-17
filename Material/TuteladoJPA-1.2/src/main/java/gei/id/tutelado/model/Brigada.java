@@ -27,13 +27,11 @@ public class Brigada {
     @Column(nullable = false)
     private String localidad;
 
-    @Column
     @OneToMany (mappedBy="brigada", fetch=FetchType.LAZY, cascade={CascadeType.PERSIST, CascadeType.REMOVE} )
     private Set<Bombero> bomberos = new HashSet<>();
     // NOTA: necesitamos @OrderBy, ainda que a colección estea definida como LAZY, por se nalgun momento accedemos á propiedade DENTRO de sesión.
     // Garantimos así que cando Hibernate cargue a colección, o faga na orde axeitada na consulta que lanza contra a BD
 
-    @Column
     @ManyToMany
     @JoinTable(name="Brigada_Intervencion",
         joinColumns = @JoinColumn(name="id_brigada"),
@@ -44,8 +42,8 @@ public class Brigada {
     public void addBombero(Bombero bombero) {
         if (bombero.getBrigada() != null)
             throw new RuntimeException ("");
-        bombero.setBrigada(this);
         this.bomberos.add(bombero);
+        bombero.setBrigada(this);
     }
 
     // Metodo de conveniencia para asegurarnos de que actualizamos os dous extremos da asociación ao mesmo tempo
@@ -56,6 +54,46 @@ public class Brigada {
             throw new RuntimeException ("");
         bombero.setBrigada(null);
         this.bomberos.remove(bombero);
+    }
+
+    // Metodo de conveniencia para asegurarno3s de que actualizamos os dous extremos da asociación ao mesmo tempo
+    public void addIncendio(Incendio incendio) {
+        Set<Brigada> aux = incendio.getBrigadas();
+        if (aux.contains(this))
+            throw new RuntimeException ("");
+        aux.add(this);
+        incendio.setBrigadas(aux);
+        this.intervenciones.add(incendio);
+    }
+    // Metodo de conveniencia para asegurarnos de que actualizamos os dous extremos da asociación ao mesmo tempo
+    public void delIncendio(Incendio incendio) {
+        if (!this.intervenciones.contains(incendio))
+            throw new RuntimeException ("");
+        if (!incendio.getBrigadas().contains(this))
+            throw new RuntimeException ("");
+        Set<Brigada> aux = incendio.getBrigadas();
+        aux.remove(this);
+        this.intervenciones.remove(incendio);
+    }
+
+    // Metodo de conveniencia para asegurarno3s de que actualizamos os dous extremos da asociación ao mesmo tempo
+    public void addRescate(Rescate rescate) {
+        Set<Brigada> aux = rescate.getBrigadas();
+        if (aux.contains(this))
+            throw new RuntimeException ("");
+        aux.add(this);
+        rescate.setBrigadas(aux);
+        this.intervenciones.add(rescate);
+    }
+    // Metodo de conveniencia para asegurarnos de que actualizamos os dous extremos da asociación ao mesmo tempo
+    public void delRescate(Rescate rescate) {
+        if (!this.intervenciones.contains(rescate))
+            throw new RuntimeException ("");
+        if (!rescate.getBrigadas().contains(this))
+            throw new RuntimeException ("");
+        Set<Brigada> aux = rescate.getBrigadas();
+        aux.remove(this);
+        this.intervenciones.remove(rescate);
     }
 
     public Long getId() {

@@ -27,7 +27,7 @@ public abstract class Intervencion {
     @Column(nullable = false)
     private String nivelGravedad;
 
-    @Column(nullable = false, unique=false)
+    @Column(nullable = false)
     private LocalDate fechaInicio;
 
     @Column
@@ -38,6 +38,7 @@ public abstract class Intervencion {
         joinColumns = @JoinColumn(name="id_intervencion"),
         inverseJoinColumns = @JoinColumn(name="id_brigada"))
     private Set<Brigada> brigadas = new HashSet<>();
+
 
     public Long getId() {
         return id;
@@ -85,6 +86,22 @@ public abstract class Intervencion {
 
     public void setBrigadas(Set<Brigada> brigadas) {
         this.brigadas = brigadas;
+    }
+
+    public void addBrigada(Brigada brigada) {
+        if (brigada.getIntervenciones().contains(this))
+            throw new RuntimeException ("");
+        this.brigadas.add(brigada);
+        brigada.getIntervenciones().add(this);
+    }
+
+    public void removeBrigada(Brigada brigada) {
+        if (!this.brigadas.contains(brigada))
+            throw new RuntimeException ("");
+        if (!brigada.getIntervenciones().contains(this))
+            throw new RuntimeException ("");
+        this.brigadas.remove(brigada);
+        brigada.getIntervenciones().remove(this);
     }
 
     @Override

@@ -3,21 +3,20 @@ package gei.id.tutelado.model;
 import javax.persistence.*;
 import java.util.Set;
 
-@Entity
-@Table(name = "Incendio")
 
 @NamedQueries({
         @NamedQuery(name="Incendio.recuperaPorCodigo",
                 query="SELECT i FROM Intervencion i JOIN Incendio r ON i.id = r.id WHERE i.codigo=:codigo")
 })
 
+@Entity
 public class Incendio extends Intervencion{
 
     @Column(nullable = false)
     double supQuemada;
 
-    @ElementCollection
-    @CollectionTable(name = "localidadesAfectadas", joinColumns = @JoinColumn(name = "id"))
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "localidadesAfectadas", joinColumns = @JoinColumn(name = "idLocalidad"))
     @Column(name = "localidad", nullable = false)
     Set<String> localidadesAfectadas;
 

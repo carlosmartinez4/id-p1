@@ -3,6 +3,7 @@ package gei.id.tutelado;
 import gei.id.tutelado.configuracion.Configuracion;
 import gei.id.tutelado.configuracion.ConfiguracionJPA;
 import gei.id.tutelado.dao.*;
+import gei.id.tutelado.model.Brigada;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.*;
@@ -13,15 +14,14 @@ import org.junit.runners.MethodSorters;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class T01_Bomberos {
-    /*private Logger log = LogManager.getLogger("gei.id.tutelado");
-    private static ProductorDatosTest productorDatos = new ProductorDatosTest();
+    private Logger log = LogManager.getLogger("gei.id.tutelado");
+    private static ProductorDatos productorDatos = new ProductorDatos();
 
     private static Configuracion cfg;
     private static BrigadaDao brigadaDao;
     private static BomberoDao bomberoDao;
-    private static IntervencionDao intervencionDao;
-    private static IntervencionDao rescateDao;
-    private static IntervencionDao incendioDao;
+    private static RescateDao rescateDao;
+    private static IncendioDao incendioDao;
 
     @Rule
     public TestRule watcher = new TestWatcher() {
@@ -50,8 +50,11 @@ public class T01_Bomberos {
         bomberoDao = new BomberoDaoJPA();
         bomberoDao.setup(cfg);
 
-        intervencionDao = new IntervencionDaoJPA();
-        intervencionDao.setup(cfg);
+        incendioDao = new IncendioDaoJPA();
+        incendioDao.setup(cfg);
+
+        rescateDao = new RescateDaoJPA();
+        rescateDao.setup(cfg);
 
         productorDatos.Setup(cfg);
         productorDatos.crearBrigadasSueltas();
@@ -72,5 +75,143 @@ public class T01_Bomberos {
 
     @After
     public void tearDown() throws Exception {
-    }*/
+    }
+
+    @Test
+    public void test01_RecuperacionBrigadas() {
+        Brigada b;
+
+        log.info("");
+        log.info("Configurando situación de partida do test -----------------------------------------------------------------------");
+
+        productorDatos.crearBrigadasSueltas();
+        productorDatos.guardaBrigadas();
+
+
+        log.info("");
+        log.info("Inicio do test --------------------------------------------------------------------------------------------------");
+        log.info("Obxectivo: Proba de recuperación desde a BD de brigadas (sen bombeiros nin intervencions asociadas) por nombre\n"
+                + "\t\t\t\t Casos contemplados:\n"
+                + "\t\t\t\t a) Recuperación por nombre existente\n"
+                + "\t\t\t\t b) Recuperacion por nombre inexistente\n");
+
+        // Situación de partida:
+        // u0 desligado
+
+        log.info("Probando recuperacion por nome EXISTENTE --------------------------------------------------");
+
+        b = brigadaDao.recuperaPorNombre(productorDatos.brigada1.getNombre());
+        Assert.assertEquals(productorDatos.brigada1.getNombre(), b.getNombre());
+        Assert.assertEquals(productorDatos.brigada1.getLocalidad(), b.getLocalidad());
+
+        log.info("");
+        log.info("Probando recuperacion por nome INEXISTENTE -----------------------------------------------");
+
+        b = brigadaDao.recuperaPorNombre("Brigada #");
+        Assert.assertNull(b);
+    }
+
+    @Test
+    public void test01_RecuperacionBrigadasBomberos(){
+        Brigada b;
+
+        log.info("");
+        log.info("Configurando situación de partida do test -----------------------------------------------------------------------");
+
+        productorDatos.crearBrigadasConIncendioYBomberos();
+
+        productorDatos.guardaDatos();
+
+        log.info("");
+        log.info("Inicio do test --------------------------------------------------------------------------------------------------");
+        log.info("Obxectivo: Proba de recuperación desde a BD de brigadas (sen bombeiros nin intervencions asociadas) por nombre\n"
+                + "\t\t\t\t Casos contemplados:\n"
+                + "\t\t\t\t a) Recuperación por nombre existente\n"
+                + "\t\t\t\t b) Recuperacion por nombre inexistente\n");
+
+        // Situación de partida:
+        // u0 desligado
+
+        log.info("Probando recuperacion por nome EXISTENTE --------------------------------------------------");
+
+        b = brigadaDao.recuperaPorNombre(productorDatos.brigada1.getNombre());
+        Assert.assertEquals(productorDatos.brigada1.getNombre(), b.getNombre());
+        Assert.assertEquals(productorDatos.brigada1.getLocalidad(), b.getLocalidad());
+
+        log.info("");
+        log.info("Probando recuperacion por nome INEXISTENTE -----------------------------------------------");
+
+        b = brigadaDao.recuperaPorNombre("Brigada #");
+        Assert.assertNull(b);
+    }
+
+    @Test
+    public void test02_GuardarBrigadas(){
+        log.info("");
+        log.info("Configurando situación de partida do test -----------------------------------------------------------------------");
+
+        productorDatos.crearBrigadasSueltas();
+
+        log.info("");
+        log.info("Inicio do test --------------------------------------------------------------------------------------------------");
+        log.info("Obxectivo: Proba de gravación na BD de nova brigada (sen bombeiros nin intervencions asociados)\n");
+
+        // Situación de partida:
+        // u0 transitorio
+
+        Assert.assertNull(productorDatos.brigada1.getId());
+        brigadaDao.almacena(productorDatos.brigada1);
+        Assert.assertNotNull(productorDatos.brigada1.getId());
+    }
+
+    @Test
+    public void test03_EliminarBrigadas() {
+        log.info("");
+        log.info("Configurando situación de partida do test -----------------------------------------------------------------------");
+
+        productorDatos.crearBrigadasSueltas();
+        productorDatos.guardaBrigadas();
+
+        log.info("");
+        log.info("Inicio do test --------------------------------------------------------------------------------------------------");
+        log.info("Obxectivo: Proba de eliminación da BD de brigadas sen bombeiros asociadas\n");
+
+        // Situación de partida:
+        // u0 desligado
+
+        Assert.assertNotNull(brigadaDao.recuperaPorNombre(productorDatos.brigada1.getNombre()));
+        brigadaDao.elimina(productorDatos.brigada1);
+        Assert.assertNull(brigadaDao.recuperaPorNombre(productorDatos.brigada1.getNombre()));
+    }
+
+    @Test
+    public void test04_ModificacionBrigadas() {
+
+        Brigada b1, b2;
+        String nuevaLocalidad;
+
+        log.info("");
+        log.info("Configurando situación de partida do test -----------------------------------------------------------------------");
+
+        productorDatos.crearBrigadasSueltas();
+        productorDatos.guardaBrigadas();
+
+        log.info("");
+        log.info("Inicio do test --------------------------------------------------------------------------------------------------");
+        log.info("Obxectivo: Proba de modificación da información básica dunha brigada sen bombeiros nin intervencions\n");
+
+        // Situación de partida:
+        // u0 desligado
+
+        nuevaLocalidad = "A Coruna";
+
+        b1 = brigadaDao.recuperaPorNombre(productorDatos.brigada1.getNombre());
+        Assert.assertNotEquals(nuevaLocalidad, b1.getLocalidad());
+        b1.setLocalidad(nuevaLocalidad);
+
+        brigadaDao.modifica(b1);
+
+        b2 = brigadaDao.recuperaPorNombre(productorDatos.brigada1.getNombre());
+        Assert.assertEquals (nuevaLocalidad, b2.getLocalidad());
+    }
 }
