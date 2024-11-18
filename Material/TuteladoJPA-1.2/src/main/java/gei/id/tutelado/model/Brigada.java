@@ -55,11 +55,11 @@ public class Brigada {
 
     // Metodo de conveniencia para asegurarno3s de que actualizamos os dous extremos da asociación ao mesmo tempo
     public void addIncendio(Incendio incendio) {
-        Set<Brigada> aux = incendio.getBrigadas();
-        if (aux.contains(this))
+        if(incendio.getBrigadas().contains(this))
             throw new RuntimeException ("");
-        aux.add(this);
-        incendio.setBrigadas(aux);
+        incendio.getBrigadas().add(this);
+        if(this.intervenciones.contains(incendio))
+            throw new RuntimeException ("");
         this.intervenciones.add(incendio);
     }
     // Metodo de conveniencia para asegurarnos de que actualizamos os dous extremos da asociación ao mesmo tempo

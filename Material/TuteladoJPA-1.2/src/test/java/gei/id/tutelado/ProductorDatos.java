@@ -112,33 +112,19 @@ public class ProductorDatos {
         this.listaRescates.add(1, rescate2);
     }
 
-    public void crearBrigadasConBomberos(){
-        this.crearBrigadasSueltas();
-        this.crearBomberosSueltos();
-
-        this.brigada1.addBombero(this.bombero1);
-        this.brigada2.addBombero(this.bombero2);
-
-        this.bombero1.setBrigada(brigada1);
-        this.bombero2.setBrigada(brigada2);
-
-    }
-
-    public void crearBrigadasConIncendioYBomberos(){
-        this.crearBrigadasSueltas();
-        this.crearIncendiosSueltos();
-        //this.crearRescatesSueltos();
-
-        this.brigada1.addIncendio(this.incendio1);
-    }
-
     public void crearBrigadasConIncendioYRescatesYBomberos(){
         this.crearBrigadasSueltas();
         this.crearIncendiosSueltos();
         this.crearRescatesSueltos();
 
+        this.brigada1.addBombero(this.bombero1);
+        this.brigada2.addBombero(this.bombero2);
+
         this.brigada1.addIncendio(this.incendio1);
         this.brigada1.addRescate(this.rescate1);
+
+        this.brigada2.addIncendio(this.incendio2);
+        this.brigada2.addRescate(this.rescate2);
     }
 
     public void guardaBomberosConBrigadas() {
@@ -189,8 +175,6 @@ public class ProductorDatos {
                     em.persist(b);
                 }
             }
-
-
 
             if (listaIncendios != null) {
                 for (Incendio i : listaIncendios) {

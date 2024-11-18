@@ -176,19 +176,21 @@ public class P01_Bomberos {
         log.info("Obxectivo: Proba de gravación na BD de novo bombero con incendios asociados\n");
 
         // Situación de partida
+        Assert.assertNull(productorDatos.brigada1.getId());
         Assert.assertNull(productorDatos.bombero1.getId());
         Assert.assertNull(productorDatos.incendio1.getId());
         Assert.assertNull(productorDatos.rescate1.getId());
-        brigadaDao.almacena(productorDatos.brigada1);
-        Assert.assertNotNull(productorDatos.brigada1.getId());
-        Assert.assertNotNull(productorDatos.incendio1.getId());
-        Assert.assertNotNull(productorDatos.rescate1.getId());
-
         Assert.assertNull(productorDatos.bombero2.getId());
         Assert.assertNull(productorDatos.incendio2.getId());
         Assert.assertNull(productorDatos.rescate2.getId());
-        brigadaDao.almacena(productorDatos.brigada2);
+
+        productorDatos.guardaDatos();
+
         Assert.assertNotNull(productorDatos.brigada1.getId());
+        Assert.assertNotNull(productorDatos.bombero1.getId());
+        Assert.assertNotNull(productorDatos.incendio1.getId());
+        Assert.assertNotNull(productorDatos.rescate1.getId());
+        Assert.assertNotNull(productorDatos.brigada2.getId());
     }
 
     @Test
