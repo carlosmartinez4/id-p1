@@ -16,7 +16,7 @@ import org.junit.runner.Description;
 import org.junit.runners.MethodSorters;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class P02_Bomberos {
+public class P02_Brigadas_Bomberos_Intervenciones {
     private Logger log = LogManager.getLogger("gei.id.tutelado");
     private static ProductorDatos productorDatos = new ProductorDatos();
 
