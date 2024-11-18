@@ -94,25 +94,6 @@ public void testBuscarBomberosPorBrigada() {
     }
 
     @Test
-    public void testCountRescatePorLocalidad() {
-        int count;
-
-        log.info("Configurando situación de partida para testCountRescatePorLocalidad...");
-        productorDatos.crearBrigadasConIncendioYRescatesYBomberos();
-        productorDatos.guardaBrigadas();
-
-        log.info("Inicio del test: countRescatePorLocalidad");
-
-
-        count = intervencionDao.countRescatePorLocalidad("Arteixo");
-        Assert.assertEquals(1, count);
-
-
-        count = intervencionDao.countRescatePorLocalidad("Pazos");
-        Assert.assertEquals(0, count);
-    }
-
-    @Test
     public void testBuscarBrigadasPorRescatesEnUnaLocalidad() {
         List<Brigada> brigadas;
 
@@ -134,4 +115,25 @@ public void testBuscarBomberosPorBrigada() {
         Assert.assertNotNull(brigadas);
         Assert.assertEquals(0, brigadas.size());
     }
+
+    @Test
+    public void testCountRescatePorLocalidad() {
+        int count;
+
+        log.info("Configurando situación de partida para testCountRescatePorLocalidad...");
+        productorDatos.crearBrigadasConIncendioYRescatesYBomberos();
+        productorDatos.guardaBrigadas();
+
+        log.info("Inicio del test: countRescatePorLocalidad");
+
+
+        count = intervencionDao.countRescatePorLocalidad("Arteixo");
+        Assert.assertEquals(1, count);
+
+
+        count = intervencionDao.countRescatePorLocalidad("Pazos");
+        Assert.assertEquals(0, count);
+    }
+
+
 }

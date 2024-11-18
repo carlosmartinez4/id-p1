@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.NamedQuery;
 
 import gei.id.tutelado.configuracion.Configuracion;
 import gei.id.tutelado.model.Bombero;

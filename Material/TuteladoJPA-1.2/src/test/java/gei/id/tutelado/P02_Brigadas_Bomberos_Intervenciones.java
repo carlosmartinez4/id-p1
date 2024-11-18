@@ -155,7 +155,7 @@ public class P02_Brigadas_Bomberos_Intervenciones {
 
         // Situación de partida
         Assert.assertNull(productorDatos.rescate1.getId());
-        intervencionDao.almacena(productorDatos.rescate1);
+        brigadaDao.almacena(productorDatos.brigada1);
         Assert.assertNotNull(productorDatos.rescate1.getId());
     }
 
