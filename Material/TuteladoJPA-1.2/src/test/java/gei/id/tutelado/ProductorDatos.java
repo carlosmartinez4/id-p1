@@ -119,6 +119,16 @@ public class ProductorDatos {
         this.brigada1.addBombero(this.bombero1);
     }
 
+    public void crearBrigadasConBomberos() {
+        this.crearBomberosSueltos();
+        this.crearBrigadasSueltas();
+
+        this.brigada1.addBombero(this.bombero1);
+        this.brigada1.addBombero(this.bombero2);
+
+    }
+
+
     public void crearRescateConBrigada(){
         this.crearBomberoConBrigada();
         this.crearRescatesSueltos();
@@ -315,7 +325,7 @@ public class ProductorDatos {
             while (itBb.hasNext())
                 em.remove(itBb.next());
 
-            Iterator<Intervencion> itI = em.createQuery("SELECT i from Intervencion i", Intervencion.class).getResultList().iterator();
+            Iterator<Intervencion> itI = em.createQuery("SELECT i from Intervencion i",Intervencion.class).getResultList().iterator();
             while (itI.hasNext())
                 em.remove(itI.next());
 
