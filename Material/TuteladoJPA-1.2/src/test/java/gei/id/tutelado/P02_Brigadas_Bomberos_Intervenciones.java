@@ -209,6 +209,15 @@ public class P02_Brigadas_Bomberos_Intervenciones {
         Brigada b1, b2;
         String nuevaLocalidad;
 
+        Bombero bb1, bb2;
+        String nuevoNombre;
+
+        Incendio i1, i2;
+        double nuevaSupQuemada;
+
+        Rescate r1, r2;
+        String nuevoObjetivo;
+
         log.info("");
         log.info("Configurando situación de partida do test -----------------------------------------------------------------------");
 
@@ -223,16 +232,37 @@ public class P02_Brigadas_Bomberos_Intervenciones {
         // u0 desligado
 
         nuevaLocalidad = "A Coruna";
+        nuevoNombre = "Juan";
+        nuevaSupQuemada = 100.0;
+        nuevoObjetivo = "Perro atrapado";
 
         b1 = brigadaDao.recuperaPorNombre(productorDatos.brigada1.getNombre());
         Assert.assertNotEquals(nuevaLocalidad, b1.getLocalidad());
         b1.setLocalidad(nuevaLocalidad);
-
         brigadaDao.modifica(b1);
-
-
-
         b2 = brigadaDao.recuperaPorNombre(productorDatos.brigada1.getNombre());
         Assert.assertEquals (nuevaLocalidad, b2.getLocalidad());
+
+        bb1 = bomberoDao.buscarPorNSS(productorDatos.bombero1.getNss());
+        Assert.assertNotEquals(nuevoNombre, bb1.getNombre());
+        bb1.setNombre(nuevoNombre);
+        bomberoDao.modifica(bb1);
+        bb2 = bomberoDao.buscarPorNSS(productorDatos.bombero1.getNss());
+        Assert.assertEquals(nuevoNombre, bb2.getNombre());
+
+        i1 = (Incendio) intervencionDao.buscarPorCodigo(productorDatos.incendio1.getCodigo());
+        Assert.assertNotEquals(nuevaSupQuemada, i1.getSupQuemada());
+        i1.setSupQuemada(nuevaSupQuemada);
+        intervencionDao.modifica(i1);
+        i2 = (Incendio) intervencionDao.buscarPorCodigo(productorDatos.incendio1.getCodigo());
+        Assert.assertTrue(nuevaSupQuemada == i2.getSupQuemada());
+
+        r1 = (Rescate) intervencionDao.buscarPorCodigo(productorDatos.rescate1.getCodigo());
+        Assert.assertNotEquals(nuevoObjetivo, r1.getObjetivo());
+        r1.setObjetivo(nuevoObjetivo);
+        intervencionDao.modifica(r1);
+        r2 = (Rescate) intervencionDao.buscarPorCodigo(productorDatos.rescate1.getCodigo());
+        Assert.assertEquals(nuevoObjetivo, r2.getObjetivo());
+
     }
 }
