@@ -125,19 +125,12 @@ public class ProductorDatos {
     }
 
     public void crearBrigadasConIncendioYBomberos(){
-        this.crearBomberosSueltos();
-        this.crearBrigadasConBomberos();
+        this.crearBrigadasSueltas();
         this.crearIncendiosSueltos();
         //this.crearRescatesSueltos();
 
-        this.brigada1.addBombero(this.bombero1);
-        this.brigada2.addBombero(this.bombero2);
-
-        this.bombero1.setBrigada(brigada1);
-        this.bombero2.setBrigada(brigada2);
-
         this.brigada1.addIncendio(this.incendio1);
-        this.incendio1.addBrigada(this.brigada1);
+
 
     }
 
@@ -190,11 +183,7 @@ public class ProductorDatos {
                 }
             }
 
-            if (listaBomberos != null) {
-                for (Bombero b : listaBomberos) {
-                    em.persist(b);
-                }
-            }
+
 
             if (listaIncendios != null) {
                 for (Incendio i : listaIncendios) {

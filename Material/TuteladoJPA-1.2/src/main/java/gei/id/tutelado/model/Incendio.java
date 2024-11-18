@@ -1,6 +1,7 @@
 package gei.id.tutelado.model;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 
@@ -21,7 +22,7 @@ public class Incendio extends Intervencion{
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "localidadesAfectadas", joinColumns = @JoinColumn(name = "idLocalidad"))
     @Column(name = "localidad", nullable = false)
-    Set<String> localidadesAfectadas;
+    Set<String> localidadesAfectadas = new HashSet<>();
 
     public double getSupQuemada() {
         return supQuemada;

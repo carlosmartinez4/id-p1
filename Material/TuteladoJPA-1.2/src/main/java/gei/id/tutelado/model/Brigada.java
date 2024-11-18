@@ -32,10 +32,7 @@ public class Brigada {
     // NOTA: necesitamos @OrderBy, ainda que a colección estea definida como LAZY, por se nalgun momento accedemos á propiedade DENTRO de sesión.
     // Garantimos así que cando Hibernate cargue a colección, o faga na orde axeitada na consulta que lanza contra a BD
 
-    @ManyToMany
-    @JoinTable(name="Brigada_Intervencion",
-        joinColumns = @JoinColumn(name="id_brigada"),
-        inverseJoinColumns = @JoinColumn(name="id_intervencion"))
+    @ManyToMany(mappedBy = "brigadas")
     private Set<Intervencion> intervenciones = new HashSet<>();
 
     // Metodo de conveniencia para asegurarno3s de que actualizamos os dous extremos da asociación ao mesmo tempo
