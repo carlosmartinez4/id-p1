@@ -140,16 +140,14 @@ public class BrigadaDaoJPA implements BrigadaDao {
     @Override
     public List<Brigada> buscarBrigadasPorRescatesEnUnaLocalidad(String localidad) {
         List<Brigada> brigadas = new ArrayList<>();
-
         try{
             em = emf.createEntityManager();
             em.getTransaction().begin();
 
-            brigadas = em.createNamedQuery("SELECT b FROM Brigada b WHERE b.id IN (" +
-                            "SELECT DISTINCT br.id FROM Rescate r " +
-                            "JOIN r.brigadas br WHERE r.localidad = :localidad" +
-                            ")", Brigada.class)
-                    .setParameter("localidad", localidad).getResultList();
+            brigadas = em.createQuery("SELECT b FROM Brigada b "+
+                    "WHERE b.localidad = "+
+                    "(SELECT r.localidad FROM Rescate r WHERE r.localidad = :loc)",
+                    Brigada.class).setParameter("loc", localidad).getResultList();
 
             em.getTransaction().commit();
             em.close();
