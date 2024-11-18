@@ -203,4 +203,36 @@ public class P02_Brigadas_Bomberos_Intervenciones {
         Assert.assertNull(brigadaDao.recuperaPorNombre(productorDatos.brigada1.getNombre()));
         Assert.assertNull(bomberoDao.buscarPorNSS(productorDatos.bombero1.getNss()));
     }
+
+    @Test
+    public void test04_ModificarBrigadasConBomberos(){
+        Brigada b1, b2;
+        String nuevaLocalidad;
+
+        log.info("");
+        log.info("Configurando situación de partida do test -----------------------------------------------------------------------");
+
+        productorDatos.crearBrigadasConIncendioYRescatesYBomberos();
+        productorDatos.guardaDatos();
+
+        log.info("");
+        log.info("Inicio do test --------------------------------------------------------------------------------------------------");
+        log.info("Obxectivo: Proba de modificación da información básica dunha brigada sen bombeiros nin intervencions\n");
+
+        // Situación de partida:
+        // u0 desligado
+
+        nuevaLocalidad = "A Coruna";
+
+        b1 = brigadaDao.recuperaPorNombre(productorDatos.brigada1.getNombre());
+        Assert.assertNotEquals(nuevaLocalidad, b1.getLocalidad());
+        b1.setLocalidad(nuevaLocalidad);
+
+        brigadaDao.modifica(b1);
+
+
+
+        b2 = brigadaDao.recuperaPorNombre(productorDatos.brigada1.getNombre());
+        Assert.assertEquals (nuevaLocalidad, b2.getLocalidad());
+    }
 }
