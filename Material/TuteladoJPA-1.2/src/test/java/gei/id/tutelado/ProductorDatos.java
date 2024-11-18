@@ -114,6 +114,7 @@ public class ProductorDatos {
 
     public void crearBrigadasConIncendioYRescatesYBomberos(){
         this.crearBrigadasSueltas();
+        this.crearBomberosSueltos();
         this.crearIncendiosSueltos();
         this.crearRescatesSueltos();
 

@@ -3,6 +3,8 @@ package gei.id.tutelado.dao;
 import gei.id.tutelado.configuracion.Configuracion;
 import gei.id.tutelado.model.Brigada;
 
+import java.util.List;
+
 public interface BrigadaDao {
 
     void setup (Configuracion config);
@@ -20,5 +22,7 @@ public interface BrigadaDao {
 
     // CONSULTAS JPQL
     //* Aqui irian o resto das consultas que se piden no enunciado (non implementadas)
+    /* MO4.6.c */
+    List<Brigada> buscarBrigadasPorRescatesEnUnaLocalidad(String localidad);
 
 }

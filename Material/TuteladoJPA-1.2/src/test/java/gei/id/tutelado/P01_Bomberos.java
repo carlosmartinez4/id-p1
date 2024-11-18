@@ -3,7 +3,10 @@ package gei.id.tutelado;
 import gei.id.tutelado.configuracion.Configuracion;
 import gei.id.tutelado.configuracion.ConfiguracionJPA;
 import gei.id.tutelado.dao.*;
+import gei.id.tutelado.model.Bombero;
 import gei.id.tutelado.model.Brigada;
+import gei.id.tutelado.model.Incendio;
+import gei.id.tutelado.model.Rescate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.*;
@@ -20,8 +23,7 @@ public class P01_Bomberos {
     private static Configuracion cfg;
     private static BrigadaDao brigadaDao;
     private static BomberoDao bomberoDao;
-    private static RescateDao rescateDao;
-    private static IncendioDao incendioDao;
+    private static IntervencionDao intervencionDao;
 
     @Rule
     public TestRule watcher = new TestWatcher() {
@@ -50,15 +52,10 @@ public class P01_Bomberos {
         bomberoDao = new BomberoDaoJPA();
         bomberoDao.setup(cfg);
 
-        incendioDao = new IncendioDaoJPA();
-        incendioDao.setup(cfg);
-
-        rescateDao = new RescateDaoJPA();
-        rescateDao.setup(cfg);
+        intervencionDao = new IntervencionDaoJPA();
+        intervencionDao.setup(cfg);
 
         productorDatos.Setup(cfg);
-        productorDatos.crearBrigadasSueltas();
-        productorDatos.crearBomberosSueltos();
     }
 
     @AfterClass
@@ -114,6 +111,9 @@ public class P01_Bomberos {
     @Test
     public void test01_RecuperacionBrigadasBomberosIncendiosRescates(){
         Brigada b;
+        Bombero bb;
+        Rescate r;
+        Incendio i;
 
         log.info("");
         log.info("Configurando situación de partida do test -----------------------------------------------------------------------");
@@ -137,6 +137,16 @@ public class P01_Bomberos {
         b = brigadaDao.recuperaPorNombre(productorDatos.brigada1.getNombre());
         Assert.assertEquals(productorDatos.brigada1.getNombre(), b.getNombre());
         Assert.assertEquals(productorDatos.brigada1.getLocalidad(), b.getLocalidad());
+
+        bb = bomberoDao.buscarPorNSS(productorDatos.bombero1.getNss());
+        Assert.assertEquals(productorDatos.bombero1.getNss(), bb.getNss());
+        Assert.assertEquals(productorDatos.bombero1.getNombre(), bb.getNombre());
+
+        r =(Rescate) intervencionDao.buscarPorCodigo(productorDatos.rescate1.getCodigo());
+        Assert.assertEquals(productorDatos.rescate1.getCodigo(), r.getCodigo());
+
+        i =(Incendio) intervencionDao.buscarPorCodigo(productorDatos.incendio1.getCodigo());
+        Assert.assertEquals(productorDatos.incendio1.getCodigo(), i.getCodigo());
 
         log.info("");
         log.info("Probando recuperacion por nome INEXISTENTE -----------------------------------------------");

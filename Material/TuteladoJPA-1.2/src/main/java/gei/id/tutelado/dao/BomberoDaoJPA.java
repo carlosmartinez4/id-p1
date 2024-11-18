@@ -10,6 +10,7 @@ import javax.persistence.NamedQuery;
 import gei.id.tutelado.configuracion.Configuracion;
 import gei.id.tutelado.model.Bombero;
 import gei.id.tutelado.model.Brigada;
+import gei.id.tutelado.model.Intervencion;
 
 public class BomberoDaoJPA implements BomberoDao {
 
@@ -117,7 +118,8 @@ public class BomberoDaoJPA implements BomberoDao {
             em = emf.createEntityManager();
             em.getTransaction().begin();
 
-            bomberos = em.createQuery("SELECT e FROM Brigada b JOIN b.bomberos e WHERE b=:b ORDER BY e.id ASC", Bombero.class).setParameter("b", b).getResultList();
+            bomberos = em.createQuery("SELECT e FROM Brigada b JOIN b.bomberos e WHERE b=:b ORDER BY e.id ASC",
+                    Bombero.class).setParameter("b", b).getResultList();
 
             em.getTransaction().commit();
             em.close();
@@ -130,5 +132,33 @@ public class BomberoDaoJPA implements BomberoDao {
         }
         return bomberos;
     }
+
+    /* MO4.6.b */
+    @Override
+    public List<Bombero> buscarBomberosPorIntervencion(Intervencion i) {
+        List <Bombero> bomberos=null;
+
+        try {
+            em = emf.createEntityManager();
+            em.getTransaction().begin();
+
+            bomberos =  em.createQuery(
+                    "SELECT DISTINCT b FROM Intervencion i " +
+                    "LEFT JOIN i.brigadas br " +
+                    "LEFT JOIN br.bomberos b " +
+                    "WHERE i = :i", Bombero.class).setParameter("i", i).getResultList();
+
+            em.getTransaction().commit();
+            em.close();
+        } catch (Exception ex) {
+            if (em != null && em.isOpen()) {
+                if (em.getTransaction().isActive()) em.getTransaction().rollback();
+                em.close();
+                throw (ex);
+            }
+        }
+        return bomberos;
+    }
+
 }
 

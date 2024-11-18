@@ -1,17 +1,20 @@
 package gei.id.tutelado.dao;
 
 import gei.id.tutelado.configuracion.Configuracion;
-import gei.id.tutelado.model.Rescate;
+
+import gei.id.tutelado.model.Intervencion;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RescateDaoJPA implements RescateDao {
+
+public class IntervencionDaoJPA implements IntervencionDao {
 
     private EntityManagerFactory emf;
     private EntityManager em;
+
 
     @Override
     public void setup(Configuracion config) {
@@ -19,14 +22,15 @@ public class RescateDaoJPA implements RescateDao {
     }
 
     @Override
-    public Rescate recuperaPorCodigo(String codigo) {
-        List<Rescate> rescates = new ArrayList<>();
+    public Intervencion buscarPorCodigo(String codigo) {
+        List<Intervencion> intervenciones = new ArrayList<>();
 
         try{
             em = emf.createEntityManager();
             em.getTransaction().begin();
 
-            rescates = em.createNamedQuery("Rescate.recuperaPorCodigo", Rescate.class).setParameter("codigo", codigo).getResultList();
+            intervenciones = em.createNamedQuery("Intervencion.recuperaPorCodigo", Intervencion.class).
+                    setParameter("codigo", codigo).getResultList();
 
             em.getTransaction().commit();
             em.close();
@@ -37,66 +41,95 @@ public class RescateDaoJPA implements RescateDao {
                 throw(ex);
             }
         }
-        return (rescates.isEmpty()?null:rescates.get(0));
+        return (intervenciones.isEmpty()?null:intervenciones.get(0));
     }
 
     @Override
-    public Rescate almacena(Rescate rescate) {
+    public Intervencion almacena(Intervencion intervencion) {
+        try{
+            em = emf.createEntityManager();
+            em.getTransaction().begin();
+
+
+            em.persist(intervencion);
+
+            em.getTransaction().commit();
+            em.close();
+        } catch (Exception ex){
+            if (em!=null && em.isOpen()){
+                if (em.getTransaction().isActive()) em.getTransaction().rollback();
+                em.close();
+                throw(ex);
+            }
+        }
+        return intervencion;
+    }
+
+    @Override
+    public void elimina(Intervencion intervencion) {
+        try{
+            em = emf.createEntityManager();
+            em.getTransaction().begin();
+
+            Intervencion i = em.find(Intervencion.class, intervencion.getId());
+            em.remove(i);
+
+            em.getTransaction().commit();
+            em.close();
+        } catch (Exception ex){
+            if (em!=null && em.isOpen()){
+                if (em.getTransaction().isActive()) em.getTransaction().rollback();
+                em.close();
+                throw(ex);
+            }
+        }
+    }
+
+    @Override
+    public Intervencion modifica(Intervencion intervencion) {
+        try{
+            em = emf.createEntityManager();
+            em.getTransaction().begin();
+
+            intervencion = em.merge(intervencion);
+
+            em.getTransaction().commit();
+            em.close();
+        } catch (Exception ex){
+            if (em!=null && em.isOpen()){
+                if (em.getTransaction().isActive()) em.getTransaction().rollback();
+                em.close();
+                throw(ex);
+            }
+        }
+        return intervencion;
+    }
+
+    @Override
+    public int countRescatePorLocalidad(String localidad) {
+        EntityManager em = null;
+        int count = 0;
+
         try {
             em = emf.createEntityManager();
             em.getTransaction().begin();
 
-            em.persist(rescate);
+            // Usamos la consulta correcta
+            Long result = em.createQuery(
+                            "SELECT COUNT(i) FROM Rescate i WHERE i.localidad = :localidad", Long.class)
+                    .setParameter("localidad", localidad)
+                    .getSingleResult();
+
+            count = result.intValue();
 
             em.getTransaction().commit();
-            em.close();
-        } catch (Exception ex){
-            if (em!=null && em.isOpen()){
+        } catch (Exception ex) {
+            if (em != null && em.isOpen()) {
                 if (em.getTransaction().isActive()) em.getTransaction().rollback();
                 em.close();
-                throw(ex);
+                throw (ex);
             }
         }
-        return rescate;
-    }
-
-    @Override
-    public void elimina(Rescate rescate) {
-        try {
-            em = emf.createEntityManager();
-            em.getTransaction().begin();
-
-            Rescate rescateTmp = em.find(Rescate.class, rescate.getCodigo());
-            em.remove(rescateTmp);
-
-            em.getTransaction().commit();
-            em.close();
-        } catch (Exception ex){
-            if (em!=null && em.isOpen()){
-                if (em.getTransaction().isActive()) em.getTransaction().rollback();
-                em.close();
-                throw(ex);
-            }
-        }
-    }
-
-    @Override
-    public Rescate modifica(Rescate rescate) {
-        try {
-            em = emf.createEntityManager();
-            em.getTransaction().begin();
-
-            em.merge(rescate);
-
-            em.getTransaction().commit();
-            em.close();
-        } catch (Exception ex){
-            if (em!=null && em.isOpen()){
-                if (em.getTransaction().isActive()) em.getTransaction().rollback();
-                em.close();
-                throw(ex);
-            }
-        }
-        return rescate;
+        return count;
     }
 }

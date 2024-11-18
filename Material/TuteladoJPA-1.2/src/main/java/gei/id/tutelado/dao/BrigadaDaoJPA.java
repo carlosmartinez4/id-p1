@@ -135,4 +135,31 @@ public class BrigadaDaoJPA implements BrigadaDao {
         }
         return brigada;
     }
+
+    /* MO4.6.c */
+    @Override
+    public List<Brigada> buscarBrigadasPorRescatesEnUnaLocalidad(String localidad) {
+        List<Brigada> brigadas = new ArrayList<>();
+
+        try{
+            em = emf.createEntityManager();
+            em.getTransaction().begin();
+
+            brigadas = em.createNamedQuery("SELECT b FROM Brigada b WHERE b.id IN (" +
+                            "SELECT DISTINCT br.id FROM Rescate r " +
+                            "JOIN r.brigadas br WHERE r.localidad = :localidad" +
+                            ")", Brigada.class)
+                    .setParameter("localidad", localidad).getResultList();
+
+            em.getTransaction().commit();
+            em.close();
+        } catch (Exception ex){
+            if (em!=null && em.isOpen()){
+                if (em.getTransaction().isActive()) em.getTransaction().rollback();
+                em.close();
+                throw(ex);
+            }
+        }
+        return brigadas;
+    }
 }
