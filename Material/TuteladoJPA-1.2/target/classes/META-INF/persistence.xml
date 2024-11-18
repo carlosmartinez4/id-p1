@@ -13,9 +13,7 @@
 	        <!-- Persistence provider -->
 	        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
-	 		<!-- Entity classes --> 
-	        <class>gei.id.tutelado.model.Usuario</class>
-			<class>gei.id.tutelado.model.EntradaLog</class>
+	 		<!-- Entity classes -->
 			<class>gei.id.tutelado.model.Brigada</class>
 			<class>gei.id.tutelado.model.Bombero</class>
 			<class>gei.id.tutelado.model.Intervencion</class>

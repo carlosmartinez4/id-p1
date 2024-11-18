@@ -9,11 +9,13 @@ import gei.id.tutelado.model.Incendio;
 import gei.id.tutelado.model.Rescate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.LazyInitializationException;
 import org.junit.*;
 import org.junit.rules.TestRule;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.junit.runners.MethodSorters;
+
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class P02_Brigadas_Bomberos_Intervenciones {
@@ -264,5 +266,63 @@ public class P02_Brigadas_Bomberos_Intervenciones {
         r2 = (Rescate) intervencionDao.buscarPorCodigo(productorDatos.rescate1.getCodigo());
         Assert.assertEquals(nuevoObjetivo, r2.getObjetivo());
 
+    }
+
+    @Test
+    public void test06_LAZY() {
+
+        Brigada b;
+        Boolean excepcion;
+
+        log.info("");
+        log.info("Configurando situación de partida do test -----------------------------------------------------------------------");
+
+        productorDatos.crearBrigadasConIncendioYRescatesYBomberos();
+        productorDatos.guardaDatos();
+
+        log.info("Inicio do test --------------------------------------------------------------------------------------------------");
+        log.info("Obxectivo: Proba da recuperación de propiedades EAGER\n");
+
+        log.info("Probando (que non hai excepcion tras) acceso inicial a propiedade EAGER fora de sesion ----------------------------------------");
+
+        b = brigadaDao.recuperaPorNombre(productorDatos.brigada1.getNombre());
+
+        try	{
+            Assert.assertEquals(1, b.getBomberos().size());
+            excepcion=false;
+        } catch (LazyInitializationException ex) {
+            excepcion=true;
+            log.info(ex.getClass().getName());
+        };
+        Assert.assertTrue(excepcion);
+    }
+
+    @Test
+    public void test06_EAGER() {
+        Incendio i;
+
+        Boolean excepcion;
+
+        log.info("");
+        log.info("Configurando situación de partida do test -----------------------------------------------------------------------");
+
+        productorDatos.crearBrigadasConIncendioYRescatesYBomberos();
+        productorDatos.guardaDatos();
+
+        log.info("Inicio do test --------------------------------------------------------------------------------------------------");
+        log.info("Obxectivo: Proba da recuperación de propiedades EAGER\n");
+
+        log.info("Probando (que non hai excepcion tras) acceso inicial a propiedade EAGER fora de sesion ----------------------------------------");
+
+        i = (Incendio) intervencionDao.buscarPorCodigo(productorDatos.incendio1.getCodigo());
+
+        try	{
+            Assert.assertEquals(2, i.getLocalidadesAfectadas().size());
+            excepcion=false;
+        } catch (LazyInitializationException ex) {
+            excepcion=true;
+            log.info(ex.getClass().getName());
+        };
+        Assert.assertFalse(excepcion);
     }
 }

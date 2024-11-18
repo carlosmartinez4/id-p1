@@ -27,7 +27,7 @@ public class Brigada {
     @Column(nullable = false)
     private String localidad;
 
-    @OneToMany (mappedBy="brigada", fetch=FetchType.LAZY, cascade={CascadeType.PERSIST, CascadeType.REMOVE} )
+    @OneToMany (mappedBy="brigada", fetch=FetchType.LAZY, cascade={CascadeType.PERSIST} )
     private Set<Bombero> bomberos = new HashSet<>();
     // NOTA: necesitamos @OrderBy, ainda que a colección estea definida como LAZY, por se nalgun momento accedemos á propiedade DENTRO de sesión.
     // Garantimos así que cando Hibernate cargue a colección, o faga na orde axeitada na consulta que lanza contra a BD
@@ -75,11 +75,11 @@ public class Brigada {
 
     // Metodo de conveniencia para asegurarno3s de que actualizamos os dous extremos da asociación ao mesmo tempo
     public void addRescate(Rescate rescate) {
-        Set<Brigada> aux = rescate.getBrigadas();
-        if (aux.contains(this))
+        if(rescate.getBrigadas().contains(this))
             throw new RuntimeException ("");
-        aux.add(this);
-        rescate.setBrigadas(aux);
+        rescate.getBrigadas().add(this);
+        if(this.intervenciones.contains(rescate))
+            throw new RuntimeException ("");
         this.intervenciones.add(rescate);
     }
 

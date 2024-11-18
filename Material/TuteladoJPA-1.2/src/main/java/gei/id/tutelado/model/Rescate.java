@@ -45,4 +45,19 @@ public class Rescate extends Intervencion{
     public void setLocalidad(String localidad) {
         this.localidad = localidad;
     }
+
+    @Override
+    public String toString() {
+        return "Rescate{" +
+                "id=" + this.getId() +
+                ", codigo='" + this.getCodigo() + '\'' +
+                ", nivelGravedad='" + getNivelGravedad() + '\'' +
+                ", fechaInicio=" + getFechaInicio() +
+                ", fechaFin=" + getFechaFin() +
+                ", brigadas=" + getBrigadas() +
+                "objetivo=" + objetivo +
+                ", estado=" + estado +
+                ", localidad=" + localidad +
+                '}';
+    }
 }

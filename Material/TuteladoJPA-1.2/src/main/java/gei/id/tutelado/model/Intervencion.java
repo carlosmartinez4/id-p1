@@ -35,7 +35,7 @@ public abstract class Intervencion {
     @Column
     private LocalDate fechaFin;
 
-    @ManyToMany
+    @ManyToMany (fetch=FetchType.LAZY)
     @JoinTable (name="Brigada_Intervencion",
         joinColumns = @JoinColumn(name="id_intervencion"),
         inverseJoinColumns = @JoinColumn(name="id_brigada"))
@@ -112,5 +112,17 @@ public abstract class Intervencion {
         int result = 1;
         result = prime * result + ((codigo == null) ? 0 : codigo.hashCode());
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Intervencion{" +
+                "id=" + id_intervencion +
+                ", codigo='" + codigo + '\'' +
+                ", nivelGravedad='" + nivelGravedad + '\'' +
+                ", fechaInicio=" + fechaInicio +
+                ", fechaFin=" + fechaFin +
+                ", brigadas=" + brigadas +
+                '}';
     }
 }

@@ -118,11 +118,12 @@ public class BomberoDaoJPA implements BomberoDao {
             em = emf.createEntityManager();
             em.getTransaction().begin();
 
-            bomberos = em.createQuery("SELECT e FROM Brigada b JOIN b.bomberos e WHERE b=:b ORDER BY e.id ASC",
+            bomberos = em.createQuery("SELECT e FROM Brigada u JOIN u.bomberos e WHERE u=:b",
                     Bombero.class).setParameter("b", b).getResultList();
 
             em.getTransaction().commit();
             em.close();
+
         } catch (Exception ex) {
             if (em != null && em.isOpen()) {
                 if (em.getTransaction().isActive()) em.getTransaction().rollback();
@@ -130,7 +131,9 @@ public class BomberoDaoJPA implements BomberoDao {
                 throw (ex);
             }
         }
+
         return bomberos;
+
     }
 
     /* MO4.6.b */

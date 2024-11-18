@@ -40,5 +40,19 @@ public class Incendio extends Intervencion{
         this.localidadesAfectadas = localidadesAfectadas;
     }
 
+    @Override
+    public String toString() {
+        return "Incendio{" +
+                "id=" + this.getId() +
+                ", codigo='" + this.getCodigo() + '\'' +
+                ", nivelGravedad='" + getNivelGravedad() + '\'' +
+                ", fechaInicio=" + getFechaInicio() +
+                ", fechaFin=" + getFechaFin() +
+                ", brigadas=" + getBrigadas() +
+                "supQuemada=" + supQuemada +
+                ", localidadesAfectadas=" + localidadesAfectadas +
+                '}';
+    }
+
 
 }
