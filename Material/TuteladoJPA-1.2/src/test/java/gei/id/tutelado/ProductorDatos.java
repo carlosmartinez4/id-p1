@@ -130,8 +130,15 @@ public class ProductorDatos {
         //this.crearRescatesSueltos();
 
         this.brigada1.addIncendio(this.incendio1);
+    }
 
+    public void crearBrigadasConIncendioYRescatesYBomberos(){
+        this.crearBrigadasSueltas();
+        this.crearIncendiosSueltos();
+        this.crearRescatesSueltos();
 
+        this.brigada1.addIncendio(this.incendio1);
+        this.brigada1.addRescate(this.rescate1);
     }
 
     public void guardaBomberosConBrigadas() {

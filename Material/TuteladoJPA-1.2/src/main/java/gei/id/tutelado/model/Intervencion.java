@@ -90,22 +90,6 @@ public abstract class Intervencion {
         this.brigadas = brigadas;
     }
 
-    public void addBrigada(Brigada brigada) {
-        if (brigada.getIntervenciones().contains(this))
-            throw new RuntimeException ("");
-        this.brigadas.add(brigada);
-        brigada.getIntervenciones().add(this);
-    }
-
-    public void removeBrigada(Brigada brigada) {
-        if (!this.brigadas.contains(brigada))
-            throw new RuntimeException ("");
-        if (!brigada.getIntervenciones().contains(this))
-            throw new RuntimeException ("");
-        this.brigadas.remove(brigada);
-        brigada.getIntervenciones().remove(this);
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o)

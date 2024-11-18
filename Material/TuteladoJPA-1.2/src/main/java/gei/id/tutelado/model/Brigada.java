@@ -32,7 +32,7 @@ public class Brigada {
     // NOTA: necesitamos @OrderBy, ainda que a colección estea definida como LAZY, por se nalgun momento accedemos á propiedade DENTRO de sesión.
     // Garantimos así que cando Hibernate cargue a colección, o faga na orde axeitada na consulta que lanza contra a BD
 
-    @ManyToMany(mappedBy = "brigadas")
+    @ManyToMany(mappedBy = "brigadas", fetch=FetchType.LAZY, cascade={CascadeType.PERSIST})
     private Set<Intervencion> intervenciones = new HashSet<>();
 
     // Metodo de conveniencia para asegurarno3s de que actualizamos os dous extremos da asociación ao mesmo tempo
@@ -82,6 +82,7 @@ public class Brigada {
         rescate.setBrigadas(aux);
         this.intervenciones.add(rescate);
     }
+
     // Metodo de conveniencia para asegurarnos de que actualizamos os dous extremos da asociación ao mesmo tempo
     public void delRescate(Rescate rescate) {
         if (!this.intervenciones.contains(rescate))

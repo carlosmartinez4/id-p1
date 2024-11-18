@@ -112,13 +112,13 @@ public class P01_Bomberos {
     }
 
     @Test
-    public void test01_RecuperacionBrigadasBomberos(){
+    public void test01_RecuperacionBrigadasBomberosIncendiosRescates(){
         Brigada b;
 
         log.info("");
         log.info("Configurando situación de partida do test -----------------------------------------------------------------------");
 
-        productorDatos.crearBrigadasConIncendioYBomberos();
+        productorDatos.crearBrigadasConIncendioYRescatesYBomberos();
 
         productorDatos.guardaDatos();
 
@@ -161,6 +161,33 @@ public class P01_Bomberos {
 
         Assert.assertNull(productorDatos.brigada1.getId());
         brigadaDao.almacena(productorDatos.brigada1);
+        Assert.assertNotNull(productorDatos.brigada1.getId());
+    }
+
+    @Test
+    public void test02_GuardarBomberosConIncendiosYRescatesYBomberos(){
+        log.info("");
+        log.info("Configurando situación de partida do test -----------------------------------------------------------------------");
+
+        productorDatos.crearBrigadasConIncendioYRescatesYBomberos();
+
+        log.info("");
+        log.info("Inicio do test --------------------------------------------------------------------------------------------------");
+        log.info("Obxectivo: Proba de gravación na BD de novo bombero con incendios asociados\n");
+
+        // Situación de partida
+        Assert.assertNull(productorDatos.bombero1.getId());
+        Assert.assertNull(productorDatos.incendio1.getId());
+        Assert.assertNull(productorDatos.rescate1.getId());
+        brigadaDao.almacena(productorDatos.brigada1);
+        Assert.assertNotNull(productorDatos.brigada1.getId());
+        Assert.assertNotNull(productorDatos.incendio1.getId());
+        Assert.assertNotNull(productorDatos.rescate1.getId());
+
+        Assert.assertNull(productorDatos.bombero2.getId());
+        Assert.assertNull(productorDatos.incendio2.getId());
+        Assert.assertNull(productorDatos.rescate2.getId());
+        brigadaDao.almacena(productorDatos.brigada2);
         Assert.assertNotNull(productorDatos.brigada1.getId());
     }
 
