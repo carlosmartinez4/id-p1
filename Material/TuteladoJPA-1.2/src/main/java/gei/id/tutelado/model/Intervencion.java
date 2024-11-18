@@ -11,7 +11,7 @@ import java.util.Set;
         initialValue=0, allocationSize=1)
 @NamedQueries({
         @NamedQuery(name="Intervencion.recuperaPorCodigo",
-                query="SELECT i FROM Intervencion i where i.id=:codigo")
+                query="SELECT i FROM Intervencion i where i.codigo=:codigo")
 })
 
 @Entity

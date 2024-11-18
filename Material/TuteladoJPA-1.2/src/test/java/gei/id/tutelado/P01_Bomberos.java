@@ -75,40 +75,6 @@ public class P01_Bomberos {
     }
 
     @Test
-    public void test01_RecuperacionBrigadas() {
-        Brigada b;
-
-        log.info("");
-        log.info("Configurando situación de partida do test -----------------------------------------------------------------------");
-
-        productorDatos.crearBrigadasSueltas();
-        productorDatos.guardaBrigadas();
-
-
-        log.info("");
-        log.info("Inicio do test --------------------------------------------------------------------------------------------------");
-        log.info("Obxectivo: Proba de recuperación desde a BD de brigadas (sen bombeiros nin intervencions asociadas) por nombre\n"
-                + "\t\t\t\t Casos contemplados:\n"
-                + "\t\t\t\t a) Recuperación por nombre existente\n"
-                + "\t\t\t\t b) Recuperacion por nombre inexistente\n");
-
-        // Situación de partida:
-        // u0 desligado
-
-        log.info("Probando recuperacion por nome EXISTENTE --------------------------------------------------");
-
-        b = brigadaDao.recuperaPorNombre(productorDatos.brigada1.getNombre());
-        Assert.assertEquals(productorDatos.brigada1.getNombre(), b.getNombre());
-        Assert.assertEquals(productorDatos.brigada1.getLocalidad(), b.getLocalidad());
-
-        log.info("");
-        log.info("Probando recuperacion por nome INEXISTENTE -----------------------------------------------");
-
-        b = brigadaDao.recuperaPorNombre("Brigada #");
-        Assert.assertNull(b);
-    }
-
-    @Test
     public void test01_RecuperacionBrigadasBomberosIncendiosRescates(){
         Brigada b;
         Bombero bb;
