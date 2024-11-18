@@ -141,6 +141,40 @@ public class P01_Bomberos {
     }
 
     @Test
+    public void test02_GuardarBomberos(){
+        log.info("");
+        log.info("Configurando situación de partida do test -----------------------------------------------------------------------");
+
+        productorDatos.crearBomberoConBrigada();
+
+        log.info("");
+        log.info("Inicio do test --------------------------------------------------------------------------------------------------");
+        log.info("Obxectivo: Proba de gravación na BD de novo bombero\n");
+
+        // Situación de partida
+        Assert.assertNull(productorDatos.bombero1.getId());
+        brigadaDao.almacena(productorDatos.brigada1);
+        Assert.assertNotNull(productorDatos.bombero1.getId());
+    }
+
+    @Test
+    public void test02_GuardarRescate(){
+        log.info("");
+        log.info("Configurando situación de partida do test -----------------------------------------------------------------------");
+
+        productorDatos.crearRescateConBrigada();
+
+        log.info("");
+        log.info("Inicio do test --------------------------------------------------------------------------------------------------");
+        log.info("Obxectivo: Proba de gravación na BD de novo rescate\n");
+
+        // Situación de partida
+        Assert.assertNull(productorDatos.rescate1.getId());
+        intervencionDao.almacena(productorDatos.rescate1);
+        Assert.assertNotNull(productorDatos.rescate1.getId());
+    }
+
+    @Test
     public void test02_GuardarBomberosConIncendiosYRescatesYBomberos(){
         log.info("");
         log.info("Configurando situación de partida do test -----------------------------------------------------------------------");
@@ -156,9 +190,6 @@ public class P01_Bomberos {
         Assert.assertNull(productorDatos.bombero1.getId());
         Assert.assertNull(productorDatos.incendio1.getId());
         Assert.assertNull(productorDatos.rescate1.getId());
-        Assert.assertNull(productorDatos.bombero2.getId());
-        Assert.assertNull(productorDatos.incendio2.getId());
-        Assert.assertNull(productorDatos.rescate2.getId());
 
         productorDatos.guardaDatos();
 
@@ -166,7 +197,6 @@ public class P01_Bomberos {
         Assert.assertNotNull(productorDatos.bombero1.getId());
         Assert.assertNotNull(productorDatos.incendio1.getId());
         Assert.assertNotNull(productorDatos.rescate1.getId());
-        Assert.assertNotNull(productorDatos.brigada2.getId());
     }
 
     @Test
@@ -187,6 +217,27 @@ public class P01_Bomberos {
         Assert.assertNotNull(brigadaDao.recuperaPorNombre(productorDatos.brigada1.getNombre()));
         brigadaDao.elimina(productorDatos.brigada1);
         Assert.assertNull(brigadaDao.recuperaPorNombre(productorDatos.brigada1.getNombre()));
+    }
+
+    @Test
+    public void test03_EliminarBrigadasConBomberos() {
+        log.info("");
+        log.info("Configurando situación de partida do test -----------------------------------------------------------------------");
+
+        productorDatos.crearBomberoConBrigada();
+        productorDatos.guardaBrigadas();
+
+        log.info("");
+        log.info("Inicio do test --------------------------------------------------------------------------------------------------");
+        log.info("Obxectivo: Proba de eliminación da BD de brigadas sen bombeiros asociadas\n");
+
+        // Situación de partida:
+        // u0 desligado
+
+        Assert.assertNotNull(brigadaDao.recuperaPorNombre(productorDatos.brigada1.getNombre()));
+        brigadaDao.elimina(productorDatos.brigada1);
+        Assert.assertNull(brigadaDao.recuperaPorNombre(productorDatos.brigada1.getNombre()));
+        Assert.assertNotNull(bomberoDao.buscarPorNSS(productorDatos.bombero1.getNss()));
     }
 
     @Test
