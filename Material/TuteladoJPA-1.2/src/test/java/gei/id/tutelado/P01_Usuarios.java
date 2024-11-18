@@ -185,7 +185,6 @@ public class P01_Usuarios {
     	
 		u2 = usuDao.recuperaPorNif(produtorDatos.u0.getNif());
 		Assert.assertEquals (novoNome, u2.getNome());
-
     } 	
 /*
     @Test
